@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Worst_DbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Worst_Db.dbo.jnQuestion' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="jnQuestion">
+          <Key>
+            <PropertyRef Name="qLeft" />
+            <PropertyRef Name="qRight" />
+          </Key>
+          <Property Name="qLeft" Type="int" Nullable="false" />
+          <Property Name="qRight" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lkQuestion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="question" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="rank" Type="int" Nullable="false" />
+          <Property Name="activeEndDate" Type="date" />
+          <Property Name="isActive" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_jnQuestion_q1">
+          <End Role="lkQuestion" Type="Self.lkQuestion" Multiplicity="1" />
+          <End Role="jnQuestion" Type="Self.jnQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lkQuestion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="jnQuestion">
+              <PropertyRef Name="qLeft" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_jnQuestion_q2">
+          <End Role="lkQuestion" Type="Self.lkQuestion" Multiplicity="1" />
+          <End Role="jnQuestion" Type="Self.jnQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lkQuestion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="jnQuestion">
+              <PropertyRef Name="qRight" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Worst_DbModelStoreContainer">
+          <EntitySet Name="lkQuestion" EntityType="Self.lkQuestion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="jnQuestion" EntityType="Self.jnQuestion" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [jnQuestion].[qLeft] AS [qLeft], 
+    [jnQuestion].[qRight] AS [qRight]
+    FROM [dbo].[jnQuestion] AS [jnQuestion]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_jnQuestion_q1" Association="Self.FK_jnQuestion_q1">
+            <End Role="lkQuestion" EntitySet="lkQuestion" />
+            <End Role="jnQuestion" EntitySet="jnQuestion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_jnQuestion_q2" Association="Self.FK_jnQuestion_q2">
+            <End Role="lkQuestion" EntitySet="lkQuestion" />
+            <End Role="jnQuestion" EntitySet="jnQuestion" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Worst_DbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="lkQuestion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="question" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="rank" Type="Int32" Nullable="false" />
+          <Property Name="activeEndDate" Type="DateTime" Precision="0" />
+          <Property Name="isActive" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="lkQuestion1" Relationship="Self.jnQuestion" FromRole="lkQuestion" ToRole="lkQuestion1" />
+          <NavigationProperty Name="lkQuestions" Relationship="Self.jnQuestion" FromRole="lkQuestion1" ToRole="lkQuestion" />
+        </EntityType>
+        <Association Name="jnQuestion">
+          <End Role="lkQuestion" Type="Self.lkQuestion" Multiplicity="*" />
+          <End Role="lkQuestion1" Type="Self.lkQuestion" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Worst_DbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="lkQuestions" EntityType="Self.lkQuestion" />
+          <AssociationSet Name="jnQuestion" Association="Self.jnQuestion">
+            <End Role="lkQuestion" EntitySet="lkQuestions" />
+            <End Role="lkQuestion1" EntitySet="lkQuestions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Worst_DbModelStoreContainer" CdmEntityContainer="Worst_DbEntities">
+          <EntitySetMapping Name="lkQuestions">
+            <EntityTypeMapping TypeName="Worst_DbModel.lkQuestion">
+              <MappingFragment StoreEntitySet="lkQuestion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="question" ColumnName="question" />
+                <ScalarProperty Name="rank" ColumnName="rank" />
+                <ScalarProperty Name="activeEndDate" ColumnName="activeEndDate" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="jnQuestion" TypeName="Worst_DbModel.jnQuestion" StoreEntitySet="jnQuestion">
+            <EndProperty Name="lkQuestion">
+              <ScalarProperty Name="id" ColumnName="qLeft" />
+            </EndProperty>
+            <EndProperty Name="lkQuestion1">
+              <ScalarProperty Name="id" ColumnName="qRight" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
